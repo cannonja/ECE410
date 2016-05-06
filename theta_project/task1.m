@@ -1,22 +1,55 @@
-%%Task 1 -- need to ask about how to get deltas without solving for them
+%%Tested modified blackscholes
+%{
+S = 200;
+DTE = 45;
+IV = 0.18;
+rf = 0.03;
 
+strikes = [180:1:220];
+deltas = [];
+cvalues = [];
+cvalues2 = [];
+equal = [];
+
+for i = strikes
+    [cp, ~, cd, ~] = blackscholes(S, i, rf, DTE/365, IV);
+    cp2 = blackscholes_delta(S, i, rf, DTE/365, IV, cd);
+    deltas = [deltas; cd];
+    cvalues = [cvalues; cp];
+    cvalues2 = [cvalues2; cp2];
+    equal = [equal; cp == cp2];
+end
+
+all(equal)
+%table(transpose(strikes), deltas , cvalues, cvalues2, 'VariableNames', {'Strikes', 'Deltas', 'Price', 'Price2'})
+%}
+
+%%Task 1
 
 S = 200;
 DTE = 45;
 IV = 0.18;
 rf = 0.03;
 
-strikes = [180:5:220];
-data = [];
+strikes = [180:1:220];
+deltas = [];
+cvalues = [];
+cvalues2 = [];
+equal = [];
 
 for i = strikes
-    [~, ~, cd, ~] = blackscholes(S, i, rf, DTE/365, IV);
-    data = [data; i cd];
+    [cp, ~, cd, ~] = blackscholes(S, i, rf, DTE/365, IV);
+    cp2 = blackscholes_delta(S, i, rf, DTE/365, IV, cd);
+    deltas = [deltas; cd];
+    cvalues = [cvalues; cp];
+    cvalues2 = [cvalues2; cp2];
+    equal = [equal; cp == cp2];
 end
 
-digits(3);
-double(data);
-data
+
+
+
+
 
 
 %%%Task 2
