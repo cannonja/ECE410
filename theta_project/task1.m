@@ -127,6 +127,38 @@ legend(p, 'K = 200', 'Delta = 0.3', 'Delta = 0.1');
 %}
 
 
+%%%%%%%Task 7
+S = 200;
+IV = 0.18;
+rf = 0.03;
+deltas = [0.3 0.1];
+days = [];
+
+DTE = 45;
+[callprice, ~, ~, ~] = blackscholes(S, S, rf, DTE/365, IV);
+exit = 0.5 * callprice;
+while callprice > exit
+    [callprice, ~, ~, ~] = blackscholes(S, S, rf, DTE/365, IV);
+    DTE = DTE - 1;
+end
+days = [days; (45 - DTE)];
+
+for i = deltas
+    DTE = 45;
+    [callprice, ~] = blackscholes_delta(S, rf, DTE/365, IV, i);
+    exit = 0.5 * callprice;
+    while callprice > exit
+        [callprice, ~] = blackscholes_delta(S, rf, DTE/365, IV, i);
+        DTE = DTE - 1;
+    end
+    days = [days; (45 - DTE)];
+end
+
+deltas = [0.5 deltas]
+table(transpose(deltas), days, 'VariableNames', {'Deltas', 'Days_to_half'})
+
+
+
 
 
 
