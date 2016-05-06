@@ -77,29 +77,55 @@ legend(p, '45 DTE', '30 DTE', '15 DTE', '0 DTE');
 
 
 
-%%%%%%%Task 3
+%%%%%%%Task 3 alone
 
 K = 200;
 S = 200;
 DTE = [45:-0.1:0.1 .01];
 IV = 0.18;
 rf = 0.03;
-y = [];
+y1 = [];
 
 for i = DTE
     [callprice, ~, ~, ~] = blackscholes(S, K, rf, i/365, IV);
-    y = [y; callprice];
+    y1 = [y1; callprice];
 end
 
 figure
-p = plot(DTE, y);
+p = plot(DTE, y1);
 set(gca, 'xdir', 'reverse');
 title('Option Value Over Time');
 xlabel('DTE');
 ylabel('Option Value');
+
+
+%%%%%%%Task 3, 4, 5, and 6
+S = 200;
+DTE = [45:-0.1:0.1 .01];
+IV = 0.18;
+rf = 0.03;
+deltas = [0.3 0.1]
+ys = y1;
+
+for i = deltas
+    y = [];
+    for j = DTE
+        [~, strike] = blackscholes_delta(S, rf, j/365, IV, i);
+        [callprice, ~, ~, ~] = blackscholes(S, strike, rf, j/365, IV);
+        y = [y; callprice];
+    end
+    ys = [ys y];
+end
+
+figure
+p = plot(DTE, ys);
+set(gca, 'xdir', 'reverse');
+title('Option Value Over Time');
+xlabel('DTE');
+ylabel('Option Value');
+legend(p, 'K = 200', 'Delta = 0.3', 'Delta = 0.1');
 %}
 
-%%%%%%%Task 4
 
 
 
