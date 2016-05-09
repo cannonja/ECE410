@@ -1,5 +1,6 @@
-%%%%%%%Task 1
 %{
+%%%%%%%Task 1
+
 S = 200;
 DTE = 45;
 IV = 0.18;
@@ -13,9 +14,10 @@ for i = deltas
     strikes = [strikes; round(strike)];
 end
 
-table(transpose(deltas), strikes, 'VariableNames', {'Delta', 'Strike'})
+uitable('Data', [transpose(deltas) strikes], 'ColumnName', {'Delta', 'Strike'})
+%}
 
-
+%{
 %%%Task 2
 
 K = 200;
@@ -41,16 +43,17 @@ xlabel('Underlying Price');
 ylabel('Option Value');
 legend(p, '45 DTE', '30 DTE', '15 DTE', '0 DTE');
 %pause
+%}
 
 
-
-%%%%%%%Task 3 alone
-
+%%%%%%%Task 3, 4, 5, and 6
+%{
 K = 200;
 S = 200;
 DTE = [45:-0.1:0.1 .01];
 IV = 0.18;
 rf = 0.03;
+deltas = [0.3 0.1];
 y1 = [];
 
 for i = DTE
@@ -61,29 +64,29 @@ end
 figure
 p = plot(DTE, y1);
 set(gca, 'xdir', 'reverse');
-title('Option Value Over Time');
+title('Option Value Over Time (K = 200)');
 xlabel('DTE');
 ylabel('Option Value');
 
-
-%%%%%%%Task 3, 4, 5, and 6
-S = 200;
-DTE = [45:-0.1:0.1 .01];
-IV = 0.18;
-rf = 0.03;
-deltas = [0.3 0.1]
-ys = y1;
-
+ydelta = [];
 for i = deltas
-    y = [];
+    y2 = [];
     for j = DTE
-        [~, strike] = blackscholes_modified(S, rf, j/365, IV, i);
-        [callprice, ~, ~, ~] = blackscholes(S, strike, rf, j/365, IV);
-        y = [y; callprice];
+        [callprice, ~] = blackscholes_modified(S, rf, j/365, IV, i);
+        y2 = [y2; callprice];
     end
-    ys = [ys y];
+    figure
+    p = plot(DTE, y2);
+    set(gca, 'xdir', 'reverse');
+    s1 = 'Option Value Over Time (Delta = ';
+    t = strcat(s1, num2str(i), ')');
+    title(t);
+    xlabel('DTE');
+    ylabel('Option Value');
+    ydelta = [ydelta y2];
 end
 
+ys = [y1 ydelta];
 figure
 p = plot(DTE, ys);
 set(gca, 'xdir', 'reverse');
@@ -91,9 +94,9 @@ title('Option Value Over Time');
 xlabel('DTE');
 ylabel('Option Value');
 legend(p, 'K = 200', 'Delta = 0.3', 'Delta = 0.1');
+%}
 
-
-
+%{
 %%%%%%%Task 7
 S = 200;
 IV = 0.18;
@@ -121,10 +124,9 @@ for i = deltas
     days = [days; (45 - DTE)];
 end
 
-deltas = [0.5 deltas]
-table(transpose(deltas), days, 'VariableNames', {'Deltas', 'Days_to_half'})
+deltas = [0.5 deltas];
+uitable('Data', [transpose(deltas) days], 'ColumnName', {'Delta', 'Days to 50%'})
 %}
-
 
 
 

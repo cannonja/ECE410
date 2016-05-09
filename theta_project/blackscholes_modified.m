@@ -1,4 +1,4 @@
-function [callprice, strike] = blackscholes_delta(stockprice, riskfree, time, volatility, delta)
+function [callprice, strike] = blackscholes_modified(stockprice, riskfree, time, volatility, delta)
 %%%Lines from original blackscholes function
 
 %d1 = (log(stockprice/strike)+(riskfree+.5*volatility^2)*time)/(volatility*sqrt(time));
