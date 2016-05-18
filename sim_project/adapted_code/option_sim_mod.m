@@ -88,6 +88,7 @@ pft = [];
 days_held = [];
 r = 0.02;   % risk free rate
 debug = [];
+prices = [];
 disp('# Month_1   Put_K  S_in  Call_K  S_out  Value_in   Date_out_f  Date_out    Value_out  Prft  Days_held')
 for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
     %%%First for loop enters position
@@ -130,14 +131,19 @@ for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
 %          if reason || reason1 || reason2  
             days_held = [days_held; days0-days_r];           
             pft = [pft;strangle0 - strangle_r];
-            tm = [tm; size(tm,1), str2num(ds(kk(k),:)), K0, strangle0, ...
+            tm = [tm; size(tm,1), str2num(ds(kk(k),:)), Kp, S0, Kc, S_r, strangle0, ...
                  str2num(ds(nfrii(k+1),:)), str2num(ds(k0,:)), ...
                  strangle_r, pft(end), days_held(end)];
             fprintf(1,'%d:\t%s\t%d\t%.2f\t%d\t%.2f\t%8.2f\t%s\t%s\t%7.2f\t%7.2f\t\t%d\n', ...
                 size(tm,1),ds(kk(k),:),Kp, S0, Kc, S_r, strangle0,ds(nfrii(k+1),:), ...
                 ds(k0,:),strangle_r,pft(end),days_held(end));
-            debug = [debug; [Kp, S0, Kc, S_r, strangle0, strangle_r]];
-             
+            debug = [debug; [S0, r, days0, sigma0, delta_call, delta_put]];
+            [mod_c, mod_ck, mod_p, mod_pk] = blackscholes_modified(S0, r, days0,...
+                                                sigma0, delta_call, delta_put);
+            hull_c = bs_european_call(S0, round(mod_ck), r, sigma0, days0);
+            hull_p = bs_european_put(S0, round(mod_pk), r, sigma0, days0);
+            prices = [prices; [hull_p, mod_p, hull_c, mod_c, round(mod_pk),...
+                     S0, round(mod_ck), r, days0, sigma0, delta_call, delta_put]]; 
              
              
 %             fprintf(1,'%d:\t%s\t%d\t%8.2f\t%s\t%s\t%7.2f\t%7.2f\t\t%d\n', ...
@@ -153,3 +159,8 @@ disp('*****************   END   **************')
 trade_entry_dates = tm(:,2);
 eqt = trade_stats(pft, days_held, trade_entry_dates);
 plot(eqt);
+
+%%%Debug
+T = array2table(prices, 'VariableName', {'Hput', 'Mput', 'Hcall', 'Mcall',...
+               'MputK', 'S0', 'McallK', 'rf', 'days0', 'IV', 'cdelt', 'pdelt'});
+T
