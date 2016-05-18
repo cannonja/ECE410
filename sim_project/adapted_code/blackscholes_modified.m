@@ -29,5 +29,5 @@ d2_put = d1_put - volatility*sqrt(time);
 
 strike_call = stockprice / exp(d1_call*volatility*sqrt(time)-(riskfree+.5*volatility^2)*time);
 callprice = stockprice*cdelta-strike_call*exp(-riskfree*time)*0.5*erfc(-d2_call/sqrt(2));
-strike_put = stockprice / exp(d1_put*volatility*sqrt(time)-(riskfree+.5*volatility^2)*time);
+strike_put = stockprice / exp(d1_put*volatility -(riskfree+.5*volatility^2)*sqrt(time));
 putprice = strike_put*exp(-riskfree*time)*0.5*erfc(d2_put/sqrt(2))-stockprice*0.5*erfc(d1_put/sqrt(2));
