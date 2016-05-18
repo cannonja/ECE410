@@ -163,4 +163,4 @@ plot(eqt);
 %%%Debug
 T = array2table(prices, 'VariableName', {'Hput', 'Mput', 'Hcall', 'Mcall',...
                'MputK', 'S0', 'McallK', 'rf', 'days0', 'IV', 'cdelt', 'pdelt'});
-T
+T;
