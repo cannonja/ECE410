@@ -103,10 +103,12 @@ for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
     time0 = days0/360;
     
     %% Select strikes
-    K0 = round(d.c(kk(k)));  % strike selected
-    delta_call = 0.9;
-    delta_put = -0.9;
-    [~, Kc, ~, Kp] = blackscholes_modified(S0, r, sigma0, time0, delta_call, delta_put);
+    %K0 = round(d.c(kk(k)));  % strike selected
+    delta_call = 0.01;
+    delta_put = -0.01;
+    %[~, Kc, ~, Kp] = blackscholes_modified(S0, r, sigma0, time0, delta_call, delta_put);
+    Kc = hull_call_mod(S0, r, sigma0, time0, delta_call);
+    Kp = hull_put_mod(S0, r, sigma0, time0, delta_put);
     Kc = round(Kc);  %Round strikes
     Kp = round(Kp);
     %% End strike selection
