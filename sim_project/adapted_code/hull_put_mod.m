@@ -46,4 +46,4 @@ function put_strike=hull_put_mod(S, r, sigma, time, delta)
 %%%% Modifications
 %%%% delta = normcdf(d1) - 1 -> therefore, d1 = norminv(delta + 1);
 %%%% Substitute for d1 in original equation and solve for K
-put_strike = S / exp(norminv(delta + 1,0,1)*sigma*sqrt(time) - (r + 0.5*sigma^2)*time)
+put_strike = S / exp(norminv(delta + 1,0,1)*sigma*sqrt(time) - (r + 0.5*sigma^2)*time);
