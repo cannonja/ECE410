@@ -96,7 +96,14 @@ for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
     % dout= datenum(dt(nfrii(k+1),:),'yyyy-mm-dd');
       
     S0 = d.c(kk(k));
-    K0 = round(d.c(kk(k)));  % strike selected 
+    %% Select strikes
+    K0 = round(d.c(kk(k)));  % strike selected
+    delta_call = 0.3
+    delta_put = -0.3
+    Kc
+    Kp
+    %% End strike selection
+    
     sigma0 = vix.c(kk(k)+ofst)/100;     
     % date0 = dt(kk(k),:);
     % find(ds(kk(k),:) == vids)
