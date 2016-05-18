@@ -87,7 +87,8 @@ tm = [];
 pft = [];
 days_held = [];
 r = 0.02;   % risk free rate
-disp('# Month_1   Strike  Value_in   Date_out_f  Date_out     Value_out  Prft  Days_held')
+debug = [];
+disp('# Month_1   Put_K  S_in  Call_K  S_out  Value_in   Date_out_f  Date_out    Value_out  Prft  Days_held')
 for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
     %%%First for loop enters position
     %%%Second for loop iterates through the days until exit
@@ -131,10 +132,17 @@ for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
             pft = [pft;strangle0 - strangle_r];
             tm = [tm; size(tm,1), str2num(ds(kk(k),:)), K0, strangle0, ...
                  str2num(ds(nfrii(k+1),:)), str2num(ds(k0,:)), ...
-                 strangle_r, pft(end), days_held(end)];           
-            fprintf(1,'%d:\t%s\t%d\t%8.2f\t%s\t%s\t%7.2f\t%7.2f\t\t%d\n', ...
-                size(tm,1),ds(kk(k),:),K0,strangle0,ds(nfrii(k+1),:), ...
-                ds(k0,:),strangle_r,pft(end),days_held(end));       
+                 strangle_r, pft(end), days_held(end)];
+            fprintf(1,'%d:\t%s\t%d\t%.2f\t%d\t%.2f\t%8.2f\t%s\t%s\t%7.2f\t%7.2f\t\t%d\n', ...
+                size(tm,1),ds(kk(k),:),Kp, S0, Kc, S_r, strangle0,ds(nfrii(k+1),:), ...
+                ds(k0,:),strangle_r,pft(end),days_held(end));
+            debug = [debug; [Kp, S0, Kc, S_r, strangle0, strangle_r]];
+             
+             
+             
+%             fprintf(1,'%d:\t%s\t%d\t%8.2f\t%s\t%s\t%7.2f\t%7.2f\t\t%d\n', ...
+%                 size(tm,1),ds(kk(k),:),K0,strangle0,ds(nfrii(k+1),:), ...
+%                 ds(k0,:),strangle_r,pft(end),days_held(end));       
             break
         end
     end
