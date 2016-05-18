@@ -89,41 +89,37 @@ days_held = [];
 r = 0.02;   % risk free rate
 disp('# Month_1   Strike  Value_in   Date_out_f  Date_out     Value_out  Prft  Days_held')
 for k=1:length(nfrii)-1  % nfrii has indices for the 3rd Friday of the month
+    %%%First for loop enters position
+    %%%Second for loop iterates through the days until exit
 
     din = datenum(ds(kk(k),:),formatIn); % formatIn = 'yyyymmdd';
-    % din = datenum(dt(kk(k),:),'yyyy-mm-dd'); 
      dout = datenum(ds(nfrii(k+1),:),formatIn);
-    % dout= datenum(dt(nfrii(k+1),:),'yyyy-mm-dd');
       
     S0 = d.c(kk(k));    
     sigma0 = vix.c(kk(k)+ofst)/100;     
-    % date0 = dt(kk(k),:);
-    % find(ds(kk(k),:) == vids)
-    % days0 = daysact(din, dout); % Matlab provided function
     days0 = daysAct_RPT(din, dout);
     time0 = days0/360;
+    
     %% Select strikes
     K0 = round(d.c(kk(k)));  % strike selected
-    delta_call = 0.3;
-    delta_put = -0.3;
+    delta_call = 0.9;
+    delta_put = -0.9;
     [~, Kc, ~, Kp] = blackscholes_modified(S0, r, sigma0, time0, delta_call, delta_put);
     Kc = round(Kc);  %Round strikes
     Kp = round(Kp);
     %% End strike selection
         
-    strangle0 = strangle(S0, Kc, Kp, r, sigma0, time0); % straddle at entry
+    strangle0 = strangle(S0, Kc, Kp, r, sigma0, time0); % strangle at entry
     
     for k0 = kk(k)+1:kk(k)+days0
         S_r = d.c(k0);
         sigma_r = vix.c(k0+ofst)/100;  
         date_r = dt(k0,:);
-        %  din_r = datenum(dt(k0,:),'yyyy-mm-dd');
         din_r = datenum(ds(k0,:),formatIn);
-        %  days_r = daysact(din_r, dout);
         days_r = daysAct_RPT(din_r, dout);
         time_r = days_r/360;
         
-        strangle_r = strangle(S_r, Kc, Kp, r, sigma_r, time_r); % updated straddle value
+        strangle_r = strangle(S_r, Kc, Kp, r, sigma_r, time_r); % updated strangle value
    
         reason2 = strangle_r >= 1.9*strangle0;
         reason1 = strangle_r <= 0.25*strangle0;
